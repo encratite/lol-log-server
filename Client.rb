@@ -24,12 +24,10 @@ class Client
       @buffer = ''
       while true
         data = @client.readpartial(ReadSize)
-        #puts @client.methods.map{|x| x.to_s}.sort.inspect
         if data.empty?
           print 'Disconnected'
           return
         end
-        #puts "Read #{data.size} bytes: #{data.inspect}"
         @buffer += data
         processBuffer
       end
@@ -65,14 +63,8 @@ class Client
     if remainingContent.size < length
       return
     end
-    #puts "Length: #{lengthField.inspect} => #{length}, buffer size: #{@buffer.size}"
-    #puts "Buffer before, last bytes: #{@buffer[@buffer.size - 20..-1].inspect}"
     @buffer = remainingContent[length..-1]
-    #puts "remainingContent, first bytes: #{remainingContent[0..20].inspect}"
-    #puts "remainingContent, last bytes: #{remainingContent[remainingContent.size - 20..-1].inspect}"
-    #puts "Buffer after, first bytes: #{@buffer[0..20].inspect}"
     content = remainingContent[0..length - 1]
-    #puts "Last bytes of content: #{content[content.size - 20..-1].inspect}"
     print "Received end of game stats (#{content.size} bytes)"
   end
 end
