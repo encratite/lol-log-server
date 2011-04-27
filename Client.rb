@@ -2,8 +2,8 @@ require 'nil/string'
 
 class Client
   ReadSize = 4 * 1024
-  MaximumPacketSize = 100 * 1024
-  MaximumLengthFieldSize = (Math.log(MaximumPacketSize) / Math.log(10)).ceil
+  MaximumUnitSize = 100 * 1024
+  MaximumLengthFieldSize = (Math.log(MaximumUnitSize) / Math.log(10)).ceil
   LengthFieldSeparator = ':'
 
   def initialize(client)
@@ -48,7 +48,7 @@ class Client
     offset = @buffer.index(LengthFieldSeparator)
     if offset == nil
       #the length field has not been read yet
-      if @buffer.size > MaximumPacketSize
+      if @buffer.size > MaximumUnitSize
         raise 'The packet size has been exceeded without having received the length field separator, disconnecting'
       end
       return
