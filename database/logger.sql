@@ -69,6 +69,7 @@ create table game_result
 
         time_finished date not null,
         game_type text not null,
+        queue_type text not null,
         duration integer not null,
 
         elo integer not null,

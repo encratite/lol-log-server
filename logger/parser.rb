@@ -22,7 +22,13 @@ def translateValue(string)
   stringPattern = /^"(.*?)"$/
   match = string.match(stringPattern)
   if match != nil
-    return match[1].force_encoding('utf-8')
+    output = match[1]
+    comparison = output.dup
+    output.force_encoding('utf-8')
+    if comparison != output
+      #puts "#{comparison.inspect} vs. #{output.inspect}"
+    end
+    return output
   end
   case string
     when '(null)', 'NaN'

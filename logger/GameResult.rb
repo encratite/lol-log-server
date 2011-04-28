@@ -5,6 +5,7 @@ class GameResult
     @id = root.get(:gameId)
     @time = Time.at(root.get(:timestamp) / 1000).getutc
     @gameType = root.get(:gameType)
+    @queueType = root.get(:queueType)
     @duration = root.get(:gameLength)
     @elo = root.get(:elo)
     @eloChange = root.get(:eloChange)
@@ -67,6 +68,7 @@ class GameResult
 
       time_finished: @time,
       game_type: @gameType,
+      queue_type: @queueType,
       duration: @duration,
 
       elo: @elo,
