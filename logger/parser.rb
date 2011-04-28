@@ -2,7 +2,6 @@ require 'nil/string'
 
 require_relative 'LogObject'
 require_relative 'LogObjectType'
-require_relative 'GameResult'
 
 def parseLine(line)
   offset = 0
@@ -100,8 +99,4 @@ def parseBody(body)
   end
   offset, root = parseBodyObject(lines, 0)
   return root
-end
-
-def interpretBodyObject(root)
-  return GameResult.new(root)
 end

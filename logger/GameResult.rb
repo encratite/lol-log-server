@@ -36,4 +36,50 @@ class GameResult
   def getTeamPlayers(root, symbol)
     return root.get(symbol, :list, :source)
   end
+
+  def processTeam(team, database)
+    teamId = database[:team].insert
+    team.each do |player|
+      fields = player.getDatabaseFields
+      playerId = database[:player_result].insert(fields)
+      fields = {
+        team_id: teamId,
+        player_id: playerId,
+      }
+      database[:team_player].insert(fields)
+    end
+    return teamId
+  end
+
+  def insertIntoDatabase(database)
+    defeatedTeamId = processTeam(@defeatedTeam, database)
+    victoriousTeamId = processTeam(@victoriousTeam, database)
+
+    gameResults = database[:game_result]
+
+    if !gameResults.where(game_id: @id).empty?
+      puts "Game #{@id} is already in the database - skipping"
+      return
+    end
+
+    fields = {
+      game_id: @id,
+
+      time_finished: @time,
+      game_type: @gameType,
+      duration: @duration,
+
+      elo: @elo,
+      elo_change: @eloChange,
+
+      ip_earned: @ipEarned,
+      ip_total: @ipTotal,
+
+      player_was_victorious: @playerWasVictorious,
+
+      defeated_team_id: defeatedTeamId,
+      victorious_team_id: victoriousTeamId,
+    }
+    gameResults.insert(fields)
+  end
 end

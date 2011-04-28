@@ -7,7 +7,7 @@ class PlayerResult
 
   Mapping = {
     leaves: :leaves,
-    level: :level,
+    level: :summonerLevel,
     losses: :losses,
     summonerName: :name,
     skinName: :champion,
@@ -72,5 +72,47 @@ class PlayerResult
       next if value == 0
       @items << value
     end
+  end
+
+  def getDatabaseFields
+    return {
+      user_id: @id,
+
+      summoner_name: @name,
+      summoner_level: @summonerLevel,
+
+      wins: @wins,
+      leaves: @leaves,
+      losses: @losses,
+
+      champion: @champion,
+      champion_level: @level,
+
+      kills: @kills,
+      deaths: @deaths,
+      assists: @assists,
+
+      minions_killed: @minionsKilled,
+      neutral_minions_killed: @neutralMinionsKilled,
+
+      gold: @gold,
+
+      physical_damage_dealt: @physicalDamageDealt,
+      physical_damage_taken: @physicalDamageTaken,
+
+      magical_damage_dealt: @magicalDamageDealt,
+      magical_damage_taken: @magicalDamageTaken,
+
+      amount_healed: @amountHealed,
+
+      turrets_destroyed: @turretsDestroyed,
+      barracks_destroyed: @barracksDestroyed,
+
+      largest_critical_strike: @largestCriticalStrike,
+      largest_multikill: @largestMultiKill,
+      longest_killing_spree: @longestKillingSpree,
+
+      time_spent_dead: @timeSpentDead,
+    }
   end
 end

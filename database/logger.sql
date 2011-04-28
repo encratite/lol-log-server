@@ -1,11 +1,11 @@
-drop table if exists team;
+drop table if exists team cascade;
 
 create table team
 (
         id serial primary key
 );
 
-drop table if exists player_result;
+drop table if exists player_result cascade;
 
 create table player_result
 (
@@ -17,8 +17,8 @@ create table player_result
         summoner_level integer not null,
 
         wins integer not null,
-        leaves integer not null,
         losses integer not null,
+        leaves integer not null,
 
         champion text not null,
         champion_level integer not null,
@@ -50,7 +50,7 @@ create table player_result
         time_spent_dead integer not null
 );
 
-drop table if exists team_player;
+drop table if exists team_player cascade;
 
 create table team_player
 (
@@ -59,7 +59,7 @@ create table team_player
         player_id integer references player_result(id) not null
 );
 
-drop table if exists game_result;
+drop table if exists game_result cascade;
 
 create table game_result
 (

@@ -1,5 +1,6 @@
 require 'nil/string'
 
+require_relative 'GameResult'
 require_relative 'parser'
 
 class Client
@@ -71,7 +72,7 @@ class Client
     content = remainingContent[0..length - 1]
     print "Received end of game stats (#{content.size} bytes)"
     root = parseBody(content)
-    #puts root.inspect
-    interpretBodyObject(root)
+    result = GameResult.new(root)
+    result.insertIntoDatabase(@database)
   end
 end
