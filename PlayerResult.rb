@@ -39,6 +39,7 @@ class PlayerResult
   attr_reader :victorious
 
   def initialize(array)
+    puts "sdfsdf"
     root = LogObject.new(nil, nil, array)
     Mapping.each do |sourceSymbol, destinationSymbol|
       value = root.get(sourceSymbol)
@@ -61,5 +62,16 @@ class PlayerResult
       setMember(destinationSymbol, value)
     end
     @victorious = statistics['LOSE'] == nil
+    @items = []
+    itemCount = 6
+    itemCount.times do |i|
+      value = statistics["ITEM#{i}"]
+      if value == nil
+        raise "Unable to retrieve item #{i}"
+      end
+      #don't keep track of empty item slots
+      next if value == 0
+      @items << value
+    end
   end
 end
