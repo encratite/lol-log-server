@@ -8,4 +8,8 @@ class LogObjectType
   def inspect
     return "<type: #{@type}>"
   end
+
+  def isArray
+    return type == 'Array'
+  end
 end

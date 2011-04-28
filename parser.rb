@@ -43,13 +43,16 @@ end
 def parseArray(lines, offset)
   array = []
   indentation, line = lines[offset]
-  #puts "Processing array: #{line} (#{offset})"
+  #puts "Processing array: #{line} (#{indentation})"
+  offset += 1
   while offset < lines.size
     currentIndentation, currentLine = lines[offset]
-    if currentIndentation < indentation
+    if currentIndentation <= indentation
+      puts "Breaking due to indentation"
       break
     end
-    offset, children = parseChildren(lines, offset + 1, indentation)
+    #puts "Processing array line: #{currentLine} (#{currentIndentation})"
+    offset, children = parseChildren(lines, offset + 1, currentIndentation)
     array << children
   end
   #puts "Array output: #{array.inspect} (#{offset})"
@@ -79,9 +82,9 @@ def parseBodyObject(lines, offset)
   name = match[1]
   valueString = match[2]
   value = translateValue(valueString)
-  if value.class == LogObjectType && value.type == 'Array'
-    offset, children = parseArray(lines, offset + 1)
-    puts "Children: #{children.inspect}"
+  if value.class == LogObjectType && value.isArray
+    offset, children = parseArray(lines, offset)
+    #puts "Children: #{children.inspect}"
   else
     offset, children = parseChildren(lines, offset + 1, indentation)
   end

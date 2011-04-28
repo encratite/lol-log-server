@@ -31,12 +31,11 @@ class LogObject
 
   def inspect(indentationLevel = 0)
     childString = ''
-    @children.each do |child|
-      childString += "\n"
-      if child.class == Array
-        childString += "#{getIndentation(indentationLevel + 1)}<array>"
-      else
-        childString += child.inspect(indentationLevel + 1)
+    if value.class == LogObjectType && value.isArray
+      childString += "\n#{getIndentation(indentationLevel + 1)}<array>"
+    else
+      @children.each do |child|
+        childString += "\n" + child.inspect(indentationLevel + 1)
       end
     end
     output = "#{getIndentation(indentationLevel)}#{@name} = #{@value.inspect}#{childString}"
