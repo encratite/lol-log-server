@@ -35,6 +35,7 @@ class Client
       end
     rescue => exception
       print "An exception occurred: #{exception.message}"
+      puts exception.backtrace.join("\n")
     end
     close
   end
@@ -42,7 +43,7 @@ class Client
   def close
     begin
       @client.close
-    rescue SystemCallError, IOError, SocketError => exception
+    rescue SystemCallError, IOError, SocketError
     end
   end
 
@@ -69,7 +70,7 @@ class Client
     content = remainingContent[0..length - 1]
     print "Received end of game stats (#{content.size} bytes)"
     root = parseBody(content)
-    puts root.inspect
-    #interpretBodyObject(root)
+    #puts root.inspect
+    interpretBodyObject(root)
   end
 end

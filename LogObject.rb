@@ -9,11 +9,15 @@ class LogObject
 
   def get(*arguments)
     if arguments.empty?
-      return @value
+      if @value.class == LogObjectType && @value.isArray
+        return @children
+      else
+        return @value
+      end
     else
       target = arguments.first
       remainingArguments = arguments[1..-1]
-      children.each do |child|
+      @children.each do |child|
         if child.class != LogObject
           raise "Tried to look for #{arguments.inspect} in a non-LogObject (#{child.class})"
         end
@@ -21,7 +25,7 @@ class LogObject
           return child.get(*remainingArguments)
         end
       end
-      return nil
+      raise "Unable to find symbol #{target.to_s.inspect}"
     end
   end
 
@@ -32,7 +36,7 @@ class LogObject
   def inspect(indentationLevel = 0)
     childString = ''
     if value.class == LogObjectType && value.isArray
-      childString += "\n#{getIndentation(indentationLevel + 1)}<array>"
+      childString += "\n#{getIndentation(indentationLevel + 1)}<array of size #{@children.size}>"
     else
       @children.each do |child|
         childString += "\n" + child.inspect(indentationLevel + 1)

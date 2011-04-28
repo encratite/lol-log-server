@@ -1,7 +1,8 @@
 require 'nil/string'
 
-require_relative 'LobObject'
+require_relative 'LogObject'
 require_relative 'LogObjectType'
+require_relative 'GameResult'
 
 def parseLine(line)
   offset = 0
@@ -22,10 +23,10 @@ def translateValue(string)
   stringPattern = /^"(.*?)"$/
   match = string.match(stringPattern)
   if match != nil
-    return match[1]
+    return match[1].force_encoding('utf-8')
   end
   case string
-    when '(null)'
+    when '(null)', 'NaN'
       return nil
     when 'false'
       return false
@@ -48,7 +49,7 @@ def parseArray(lines, offset)
   while offset < lines.size
     currentIndentation, currentLine = lines[offset]
     if currentIndentation <= indentation
-      puts "Breaking due to indentation"
+      #puts "Breaking due to indentation"
       break
     end
     #puts "Processing array line: #{currentLine} (#{currentIndentation})"
@@ -101,17 +102,12 @@ def parseBody(body)
   return root
 end
 
-def interpretTeam(root, symbol)
-  root.children.each do |child|
-    #puts child.name
-  end
-  team = root.get(:body, symbol)
-  puts team.inspect
-  players = team.get(:list, :source)
-  puts players.size
+def getTeamPlayers(root, symbol)
+  return root.get(symbol, :list, :source)
 end
 
 def interpretBodyObject(root)
-  ownTeam = interpretTeam(root, :teamPlayerParticipantStats)
-  otherTeam = interpretTeam(root, :otherTeamPlayerParticipantStats)
+  ownTeam = getTeamPlayers(root, :teamPlayerParticipantStats)
+  otherTeam = getTeamPlayers(root, :otherTeamPlayerParticipantStats)
+  return GameResult.new(ownTeam, otherTeam)
 end
