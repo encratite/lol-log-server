@@ -1,5 +1,7 @@
 require 'nil/string'
 
+require_relative 'parser'
+
 class Client
   ReadSize = 4 * 1024
   MaximumUnitSize = 100 * 1024
@@ -66,5 +68,8 @@ class Client
     @buffer = remainingContent[length..-1]
     content = remainingContent[0..length - 1]
     print "Received end of game stats (#{content.size} bytes)"
+    root = parseBody(content)
+    puts root.inspect
+    #interpretBodyObject(root)
   end
 end
