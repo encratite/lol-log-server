@@ -1,7 +1,8 @@
 require_relative 'PlayerResult'
 
 class GameResult
-  def initialize(team1, team2)
+  def initialize(id, team1, team2)
+    @id = id
     if team1.size != team2.size
       raise "Team sizes are not equal: #{team1.size} != #{team2.size}"
     end

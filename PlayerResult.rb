@@ -39,7 +39,6 @@ class PlayerResult
   attr_reader :victorious
 
   def initialize(array)
-    puts "sdfsdf"
     root = LogObject.new(nil, nil, array)
     Mapping.each do |sourceSymbol, destinationSymbol|
       value = root.get(sourceSymbol)

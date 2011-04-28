@@ -107,7 +107,8 @@ def getTeamPlayers(root, symbol)
 end
 
 def interpretBodyObject(root)
+  id = root.get(:gameId)
   ownTeam = getTeamPlayers(root, :teamPlayerParticipantStats)
   otherTeam = getTeamPlayers(root, :otherTeamPlayerParticipantStats)
-  return GameResult.new(ownTeam, otherTeam)
+  return GameResult.new(id, ownTeam, otherTeam)
 end
