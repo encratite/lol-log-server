@@ -6,31 +6,44 @@ create table team
 create table player_result
 (
         id serial primary key,
-        leaves integer not null,
-        summoner_level integer not null,
-        losses integer not null,
-        summoner_name text not null,
-        champion text not null,
+
         user_id integer not null,
+
+        summoner_name text not null,
+        summoner_level integer not null,
+
         wins integer not null,
-        minions_killed integer not null,
-        physical_damage_taken integer not null,
-        physical_damage_dealt integer not null,
-        amount_healed integer not null,
-        assists  integer not null,
-        gold integer not null,
-        largest_critical_strike integer not null,
-        magical_damage_dealt integer not null,
-        largest_multikill integer not null,
-        barracks_destroyed integer not null,
+        leaves integer not null,
+        losses integer not null,
+
+        champion text not null,
         champion_level integer not null,
-        longest_killing_spree integer not null,
-        time_spent_dead integer not null,
-        neutral_minions_killed integer not null,
-        magical_damage_taken integer not null,
-        turrets_destroyed integer not null,
+
+        kills integer not null,
         deaths integer not null,
-        kills integer not null
+        assists integer not null,
+
+        minions_killed integer not null,
+        neutral_minions_killed integer not null,
+
+        gold integer not null,
+
+        physical_damage_dealt integer not null,
+        physical_damage_taken integer not null,
+
+        magical_damage_dealt integer not null,
+        magical_damage_taken integer not null,
+
+        amount_healed integer not null,
+
+        turrets_destroyed integer not null,
+        barracks_destroyed integer not null,
+
+        largest_critical_strike integer not null,
+        largest_multikill integer not null,
+        longest_killing_spree integer not null,
+
+        time_spent_dead integer not null
 );
 
 create table team_player
