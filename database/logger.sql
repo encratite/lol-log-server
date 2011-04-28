@@ -64,8 +64,21 @@ drop table if exists game_result;
 create table game_result
 (
         id serial primary key,
+
         game_id integer unique not null,
+
         time_finished date not null,
+        game_type text not null,
+        duration integer not null,
+
+        elo integer not null,
+        elo_change integer not null,
+
+        ip_earned integer not null,
+        ip_total integer not null,
+
+        player_was_victorious boolean not null,
+
         defeated_team_id integer references team(id) not null,
         victorious_team_id integer references team(id) not null
 );
