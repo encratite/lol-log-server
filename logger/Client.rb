@@ -8,8 +8,9 @@ class Client
   MaximumLengthFieldSize = (Math.log(MaximumUnitSize) / Math.log(10)).ceil
   LengthFieldSeparator = ':'
 
-  def initialize(client)
+  def initialize(client, database)
     @client = client
+    @database = database
     addressArray = @client.peeraddr
     @port = addressArray[1]
     @address = addressArray[2]

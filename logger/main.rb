@@ -1,8 +1,8 @@
-require_relative 'Configuration'
+require_relative '../configuration/Configuration'
 require_relative 'LogServer'
 
-address = Configuration::Address
-port = Configuration::Port
-server = LogServer.new(address, port)
+address = LoggerConfiguration::Address
+port = LoggerConfiguration::Port
+server = LogServer.new(LoggerConfiguration, DatabaseConfiguration)
 puts "Running logging server on #{address}:#{port}"
 server.acceptLoop
