@@ -1,7 +1,11 @@
+drop table if exists team;
+
 create table team
 (
         id serial primary key
 );
+
+drop table if exists player_result;
 
 create table player_result
 (
@@ -46,12 +50,16 @@ create table player_result
         time_spent_dead integer not null
 );
 
+drop table if exists team_player;
+
 create table team_player
 (
         id serial primary key,
         team_id integer references team(id) not null,
         player_id integer references player_result(id) not null
 );
+
+drop table if exists game_result;
 
 create table game_result
 (

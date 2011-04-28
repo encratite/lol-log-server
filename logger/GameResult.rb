@@ -1,24 +1,39 @@
 require_relative 'PlayerResult'
 
 class GameResult
-  def initialize(id, time, team1, team2)
-    @id = id
-    @time = time
-    if team1.size != team2.size
-      raise "Team sizes are not equal: #{team1.size} != #{team2.size}"
+  def initialize(root)
+    @id = root.get(:gameId)
+    @time = Time.at(root.get(:timestamp) / 1000).getutc
+    @gameType = root.get(:gameType)
+    @duration = root.get(:gameLength)
+    @elo = root.get(:elo)
+    @eloChange = root.get(:eloChange)
+    @ipEarned = root.get(:ipEarned)
+    @ipTotal = root.get(:ipTotal)
+    ownTeam = getTeamPlayers(root, :teamPlayerParticipantStats)
+    otherTeam = getTeamPlayers(root, :otherTeamPlayerParticipantStats)
+    if ownTeam.size != otherTeam.size
+      raise "Team sizes are not equal: #{ownTeam.size} != #{otherTeam.size}"
     end
-    if team1.empty?
+    if ownTeam.empty?
       raise 'Encountered a team without players'
     end
-    team1, team2 = [team1, team2].map do |team|
+    ownTeam, otherTeam = [ownTeam, otherTeam].map do |team|
       team.map do |player|
         PlayerResult.new(player)
       end
     end
-    if team1.first.victorious
-      team1, team2 = [team2, team1]
+    @playerWasVictorious = ownTeam.first.victorious
+    if @playerWasVictorious
+      @defeatedTeam = otherTeam
+      @victoriousTeam = ownTeam
+    else
+      @defeatedTeam = ownTeam
+      @victoriousTeam = otherTeam
     end
-    @defeatedTeam = team1
-    @victoriousTeam = team2
+  end
+
+  def getTeamPlayers(root, symbol)
+    return root.get(symbol, :list, :source)
   end
 end

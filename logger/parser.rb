@@ -102,14 +102,6 @@ def parseBody(body)
   return root
 end
 
-def getTeamPlayers(root, symbol)
-  return root.get(symbol, :list, :source)
-end
-
 def interpretBodyObject(root)
-  id = root.get(:gameId)
-  time = Time.at(root.get(:timestamp) / 1000).getutc
-  ownTeam = getTeamPlayers(root, :teamPlayerParticipantStats)
-  otherTeam = getTeamPlayers(root, :otherTeamPlayerParticipantStats)
-  return GameResult.new(id, time, ownTeam, otherTeam)
+  return GameResult.new(root)
 end
