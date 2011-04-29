@@ -13,7 +13,8 @@ class OverviewHandler < SiteContainer
         else
           writer.write(', ')
         end
-        writer.a(href: '') do
+        path = @playerHandler.getPath(player[:user_id].to_s)
+        writer.a(href: path) do
           player[:summoner_name]
         end
       end

@@ -7,8 +7,8 @@ require 'application/OverviewHandler'
 require 'application/PlayerHandler'
 
 lolSite = LoLSite.new(DatabaseConfiguration, SiteConfiguration)
-OverviewHandler.new(lolSite)
-PlayerHandler.new(lolSite)
+playerHandler = PlayerHandler.new(lolSite)
+OverviewHandler.new(lolSite, playerHandler)
 
 handler = lambda do |environment|
   lolSite.requestManager.handleRequest(environment)

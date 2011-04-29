@@ -7,6 +7,11 @@ require 'application/error'
 require 'visual/OverviewHandler'
 
 class OverviewHandler < SiteContainer
+  def initialize(site, playerHandler)
+    super(site)
+    @playerHandler = playerHandler.playerHandler
+  end
+
   def installHandlers
     @overviewHandler = WWWLib::RequestHandler.handler('overview', method(:overview), 1)
     addHandler(@overviewHandler)

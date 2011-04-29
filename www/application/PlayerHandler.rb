@@ -8,9 +8,11 @@ require 'application/error'
 require 'visual/PlayerHandler'
 
 class PlayerHandler < SiteContainer
+  attr_reader :playerHandler
+
   def installHandlers
-    playerHandler = WWWLib::RequestHandler.handler('player', method(:viewPlayer), 1)
-    addHandler(playerHandler)
+    @playerHandler = WWWLib::RequestHandler.handler('player', method(:viewPlayer), 1)
+    addHandler(@playerHandler)
   end
 
   def viewPlayer(request)
