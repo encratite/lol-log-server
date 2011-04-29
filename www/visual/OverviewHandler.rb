@@ -38,7 +38,7 @@ class OverviewHandler < SiteContainer
       end
       resultsMap.each do |gameResults, teams|
         writer.tr do
-          writer.td { gameResults[:time_finished].to_s }
+          writer.td { gameResults[:time_finished].getutc.to_s }
           teams.each do |team|
             processTeam(writer, team)
           end

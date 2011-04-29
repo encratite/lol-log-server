@@ -67,7 +67,7 @@ create table game_result
 
         game_id integer unique not null,
 
-        time_finished date not null,
+        time_finished timestamp not null,
         game_type text not null,
         queue_type text not null,
         duration integer not null,
