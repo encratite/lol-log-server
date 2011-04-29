@@ -26,7 +26,7 @@ class OverviewHandler < SiteContainer
     writer.p do
       "This is an overview of the end of game stats stored in the database. Showing page #{page} of #{pageCount}. The database contains #{gameCount} game(s) overall."
     end
-    writer.table do
+    writer.table(class: 'gameTable') do
       writer.tr do
         columns = [
           'End of game',
@@ -55,6 +55,27 @@ class OverviewHandler < SiteContainer
         end
       end
       nil
+    end
+    if pageCount > 1
+      writer.table(class: 'pageLinks') do
+        writer.tr do
+          pageWriter = lambda do |step, description, style|
+            writer.td(class: style) do
+              increment = page + step
+              target = @overviewHandler.getPath(increment.to_s)
+              if increment < 1 || increment > pageCount
+                ''
+              else
+                writer.a(href: target) do
+                  description
+                end
+              end
+            end
+                    end
+          pageWriter.call(-1, 'Previous page', 'previousPage')
+          pageWriter.call(1, 'Next page', 'nextPage')
+        end
+      end
     end
     return writer.output
   end

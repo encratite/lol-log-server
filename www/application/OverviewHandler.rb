@@ -8,8 +8,8 @@ require 'visual/OverviewHandler'
 
 class OverviewHandler < SiteContainer
   def installHandlers
-    overviewHandler = WWWLib::RequestHandler.handler('overview', method(:overview), 1)
-    addHandler(overviewHandler)
+    @overviewHandler = WWWLib::RequestHandler.handler('overview', method(:overview), 1)
+    addHandler(@overviewHandler)
   end
 
   def getTeamData(teamId)
@@ -24,7 +24,7 @@ class OverviewHandler < SiteContainer
     page = pageString.to_i
     gamesPerPage = @configuration::OverviewGamesPerPage
     gameCount = @database[:game_result].count
-    pageCount = (gameCount / gamesPerPage).ceil
+    pageCount = (gameCount.to_f / gamesPerPage).ceil
     if page < 1 || page > pageCount
       argumentError
     end

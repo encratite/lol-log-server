@@ -84,3 +84,31 @@ td
     padding: 0 0.3em 0 0.3em;
     border: 1px solid white;
 }
+
+table.gameTable
+{
+    width: 100%;
+}
+
+table.pageLinks
+{
+    margin-top: 1em;
+    width: 100%;
+}
+
+table.pageLinks td
+{
+    border: 0;
+    font-weight: bold;
+}
+
+td.previousPage
+{
+    padding-left: 2em;
+}
+
+td.nextPage
+{
+    padding-right: 2em;
+    text-align: right;
+}
