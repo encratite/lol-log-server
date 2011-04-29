@@ -8,7 +8,7 @@ require 'visual/OverviewHandler'
 
 class OverviewHandler < SiteContainer
   def installHandlers
-    overviewHandler = WWWLib::RequestHandler.menu('Overview', 'overview', method(:overview), 1)
+    overviewHandler = WWWLib::RequestHandler.handler('overview', method(:overview), 1)
     addHandler(overviewHandler)
   end
 
@@ -28,7 +28,7 @@ class OverviewHandler < SiteContainer
       argumentError
     end
     offset = (page - 1) * gamesPerPage
-    gameResults = @database[:game_result].select(:id, :time_finished, :duration, :defeated_team_id, :victorious_team_id).order_reverse(:time_finished).limit(gamesPerPage, offset)
+    gameResults = @database[:game_result].select(:id, :time_finished, :duration, :defeated_team_id, :victorious_team_id).reverse_order(:time_finished).limit(gamesPerPage, offset)
     resultsMap = {}
     gameResults.each do |result|
       teams = [:defeated_team_id, :victorious_team_id].map do |symbol|
@@ -36,6 +36,7 @@ class OverviewHandler < SiteContainer
       end
       resultsMap[result] = teams
     end
-    return @generator.get(renderOverview, request)
+    content = renderOverview(resultsMap)
+    return @generator.get(content, request)
   end
 end

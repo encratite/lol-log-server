@@ -9,7 +9,7 @@ class LoLSite
 
   def initialize(databaseConfiguration, siteConfiguration)
     @requestManager = WWWLib::RequestManager.new
-    @mainHandler = WWWLib::RequestHandler.new('league-of-legends')
+    @mainHandler = WWWLib::RequestHandler.new('lol')
     @requestManager.addHandler(@mainHandler)
     @generator = LoLSiteGenerator.new(self, @requestManager)
     @generator.addStylesheet(getStylesheet('league-of-legends'))
