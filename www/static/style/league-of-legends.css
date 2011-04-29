@@ -1,80 +1,86 @@
 *
 {
-	font-family: "Arial", sans-serif;
-	font-size: small;
-	margin: 0;
-	padding: 0;
+    font-family: "Arial", sans-serif;
+    font-size: small;
+    margin: 0;
+    padding: 0;
 }
 
 body
 {
-	color: #ffffff;
-	background: #000000;
+    color: #ffffff;
+    background: #000000;
 }
 
 h1
 {
-	font-size: 2.5em;
-	margin: 0.8em 0 0.8em 0;
+    font-size: 2.5em;
+    margin: 0.8em 0 0.8em 0;
 }
 
 h2
 {
-	font-size: 2em;
-	margin: 0.6em 0 0.6em 0;
+    font-size: 2em;
+    margin: 0.6em 0 0.6em 0;
 }
 
 h3
 {
-	font-size: 1.5em;
-	margin: 1em 0 0.5em 0;
+    font-size: 1.5em;
+    margin: 1em 0 0.5em 0;
 }
 
 p
 {
-	margin: 0 auto;
-	text-align: justify;
-	margin: 0.4em 0 0.4em 0;
+    margin: 0 auto;
+    text-align: justify;
+    margin: 0.4em 0 0.4em 0;
 }
 
 div.container
 {
-	margin: 0 auto;
-	border: 1px solid #fff;
-	width: 1200px;
-	padding: 1em;
-	text-align: left;
-        margin-bottom: 4em;
+    margin: 0 auto;
+    border: 1px solid #fff;
+    width: 1200px;
+    padding: 1em;
+    text-align: left;
+    margin-bottom: 4em;
 }
 
 div.center
 {
-	text-align: center;
+    text-align: center;
 }
 
-#menu
+a
 {
-	background-color: #000;
-	padding: 0.2em 0 0.2em 4em;
-	margin: 0 0 1em 0;
+    text-decoration: none;
+    color: #3651f6;
 }
 
-#menu li
+a:active
 {
-	font-weight: bold;
-	display: inline;
-	margin-right: 4em;
+    color: #db3549;
 }
 
-#menu a
+a:visited
 {
-	text-decoration: none;
-	color: #fff;
-	background: none;
+    color: #3651f6;
 }
 
-#menu a:hover
+a:hover
 {
-	text-decoration: underline;
-	color: #aaa;
+    color: #457e6f;
+    text-decoration: underline;
+}
+
+table
+{
+    border-collapse: collapse;
+}
+
+td
+{
+    padding: 0 0.3em 0 0.3em;
+    border: 1px solid white;
 }

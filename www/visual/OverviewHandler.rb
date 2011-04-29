@@ -1,6 +1,7 @@
 require 'www-library/HTMLWriter'
 
 require 'application/SiteContainer'
+require 'application/time'
 
 class OverviewHandler < SiteContainer
   def processTeam(writer, team)
@@ -20,12 +21,15 @@ class OverviewHandler < SiteContainer
     end
   end
 
-  def renderOverview(resultsMap)
+  def renderOverview(resultsMap, gameCount, page, pageCount)
     writer = WWWLib::HTMLWriter.new
+    writer.p do
+      "This is an overview of the end of game stats stored in the database. Showing page #{page} of #{pageCount}. The database contains #{gameCount} game(s) overall."
+    end
     writer.table do
       writer.tr do
         columns = [
-          'Date',
+          'End of game',
           'Defeated team',
           'Victorious team',
           'Duration',
@@ -38,7 +42,7 @@ class OverviewHandler < SiteContainer
       end
       resultsMap.each do |gameResults, teams|
         writer.tr do
-          writer.td { gameResults[:time_finished].getutc.to_s }
+          writer.td { getTimeString(gameResults[:time_finished]) }
           teams.each do |team|
             processTeam(writer, team)
           end

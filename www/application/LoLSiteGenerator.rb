@@ -10,10 +10,9 @@ class LoLSiteGenerator < WWWLib::SiteGenerator
     @site = site
   end
 
-  def get(content, request, title = nil)
-    content = render(title, request, content)
-    title = request.handler.menuDescription if title == nil
-    title = "#{title} - #{Name}"
-    super(title, content)
+  def get(content, request, title)
+    content = render(request, content)
+    fullTitle = "#{title} - #{Name}"
+    super(fullTitle, content)
   end
 end
