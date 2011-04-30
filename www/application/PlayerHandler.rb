@@ -11,14 +11,38 @@ require 'visual/PlayerHandler'
 class PlayerHandler < SiteContainer
   attr_reader :playerHandler
 
+  SortableColumns = [
+    'champion',
+    'gameCount',
+    'winRatio',
+    'killsPerGame',
+    'deathsPerGame',
+    'assistsPerGame',
+    'champion.killsPerDeath',
+    'killsAndAssistsPerDeath',
+    'minionsKilledPerGame',
+    'neutralMinionsKilledPerGame',
+    'goldPerGame',
+  ]
+
   def installHandlers
-    @playerHandler = WWWLib::RequestHandler.handler('player', method(:viewPlayer), 1)
+    @playerHandler = WWWLib::RequestHandler.handler('player', method(:viewPlayer), 1..2)
     addHandler(@playerHandler)
   end
 
+  def nanHack
+    NaN
+  end
+
   def viewPlayer(request)
-    playerIdString = request.arguments.first
+    arguments = request.arguments
+    playerIdString = arguments.first
     if !playerIdString.isNumber
+      argumentError
+    end
+    sortingString = arguments.size == 1 ? SortableColumns.first : arguments[1]
+    sortableIndex = SortableColumns.index(sortingString)
+    if sortableIndex == nil
       argumentError
     end
     playerId = playerIdString.to_i
@@ -33,7 +57,27 @@ class PlayerHandler < SiteContainer
     championData = {}
     sortByChampion(defeats, championData, false)
     sortByChampion(victories, championData, true)
-    content = renderPlayer(playerName, defeats, victories, championData.values)
+    championData.each do |key, value|
+      setChampionColumns(value)
+    end
+    championData = championData.values.sort do |x, y|
+      translate = lambda do |container, index|
+        input = container.columns[index]
+        if input.class == Float && (input.nan? || input.infinite?)
+          -1.0
+        else
+          input
+        end
+      end
+      left = translate.call(x, sortableIndex)
+      right = translate.call(y, sortableIndex)
+      if left.class == String
+        left <=> right
+      else
+        - (left <=> right)
+      end
+    end
+    content = renderPlayer(playerName, playerId, defeats, victories, championData)
     return @generator.get(content, request, title)
   end
 

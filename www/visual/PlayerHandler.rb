@@ -2,15 +2,31 @@ require 'www-library/HTMLWriter'
 
 require 'application/SiteContainer'
 
-class PlayerHandler < SiteContainer
-  def percentage(input)
-    return sprintf('%.1f', input * 100.0) + '%'
+def percentageString(input)
+  return sprintf('%.1f', input * 100.0) + '%'
+end
+
+class Percentage
+  attr_reader :percentage
+
+  def initialize(percentage)
+    @percentage = percentage
   end
 
-  def renderPlayer(playerName, defeats, victories, championData)
+  def to_s
+    return percentageString(@percentage)
+  end
+
+  def <=>(other)
+    @percentage <=> other.percentage
+  end
+end
+
+class PlayerHandler < SiteContainer
+  def renderPlayer(playerName, playerId, defeats, victories, championData)
     writer = WWWLib::HTMLWriter.new
     gameCount = defeats.size + victories.size
-    winRatio = percentage(victories.size.to_f / gameCount)
+    winRatio = percentageString(victories.size.to_f / gameCount)
     stats = [
       ['Summoner name', playerName],
       ['Total number of games', gameCount],
@@ -41,37 +57,26 @@ class PlayerHandler < SiteContainer
           'Neutral minions',
           'Gold',
         ]
+        columnIndex = 0
         columns.each do |column|
           writer.th do
-            column
+            columnString = SortableColumns[columnIndex]
+            path = @playerHandler.getPath(playerId.to_s, columnString)
+            writer.a(href: path) do
+              column
+            end
           end
+          columnIndex += 1
         end
       end
       championData.each do |champion|
-        name = champion.champion
-        championWriter = WWWLib::HTMLWriter.new
-        championWriter.img(src: @site.getImage('champion', 'small', "#{name}.png"), alt: name)
-        championWriter.b { name }
-        columns = [
-          championWriter.output,
-          champion.gameCount,
-          percentage(champion.winRatio),
-          champion.killsPerGame,
-          champion.deathsPerGame,
-          champion.assistsPerGame,
-          champion.killsPerDeath,
-          champion.killsAndAssistsPerDeath,
-          champion.minionsKilledPerGame,
-          champion.neutralMinionsKilledPerGame,
-          champion.goldPerGame,
-        ]
         writer.tr do
-          columns.each do |value|
+          champion.columns.each do |value|
             writer.td do
               if value.class == Float
                 sprintf('%.1f', value)
               else
-                value
+                value.to_s
               end
             end
           end
@@ -79,5 +84,28 @@ class PlayerHandler < SiteContainer
       end
     end
     return writer.output
+  end
+
+  def setChampionColumns(champion)
+    name = champion.champion
+    championWriter = WWWLib::HTMLWriter.new
+    championWriter.img(src: @site.getImage('champion', 'small', "#{name}.png"), alt: name)
+    championWriter.b { name }
+
+    columns = [
+      championWriter.output,
+      champion.gameCount,
+      Percentage.new(champion.winRatio),
+      champion.killsPerGame,
+      champion.deathsPerGame,
+      champion.assistsPerGame,
+      champion.killsPerDeath,
+      champion.killsAndAssistsPerDeath,
+      champion.minionsKilledPerGame,
+      champion.neutralMinionsKilledPerGame,
+      champion.goldPerGame,
+    ]
+
+    champion.columns = columns
   end
 end

@@ -5,6 +5,8 @@ class ChampionPerformance
 
   attr_reader :champion, :victories, :defeats
 
+  attr_accessor :columns
+
   def initialize(row, isVictory)
     @champion = fixName(row[:champion])
 
