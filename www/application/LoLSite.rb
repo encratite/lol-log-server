@@ -12,7 +12,9 @@ class LoLSite
     @mainHandler = WWWLib::RequestHandler.new('lol')
     @requestManager.addHandler(@mainHandler)
     @generator = LoLSiteGenerator.new(self, @requestManager)
-    @generator.addStylesheet(getStylesheet('league-of-legends'))
+    base = 'league-of-legends'
+    @generator.addStylesheet(getStylesheet(base))
+    @generator.setIcon(getIcon(base))
     @database = getDatabase(databaseConfiguration)
     @configuration = siteConfiguration
   end
@@ -27,5 +29,9 @@ class LoLSite
 
   def getImage(*path)
     getStaticPath('image', path)
+  end
+
+  def getIcon(name)
+    getStaticPath('icon', [name + '.ico'])
   end
 end
