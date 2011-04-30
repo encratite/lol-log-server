@@ -48,8 +48,12 @@ class PlayerHandler < SiteContainer
         end
       end
       championData.each do |champion|
+        name = champion.champion
+        championWriter = WWWLib::HTMLWriter.new
+        championWriter.img(src: @site.getImage('champion', 'small', "#{name}.png"), alt: name)
+        championWriter.b { name }
         columns = [
-          champion.champion,
+          championWriter.output,
           champion.gameCount,
           percentage(champion.winRatio),
           champion.killsPerGame,

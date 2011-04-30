@@ -17,15 +17,15 @@ class LoLSite
     @configuration = siteConfiguration
   end
 
-  def getStaticPath(base, file)
-    return @mainHandler.getPath('static', base, file)
+  def getStaticPath(base, path)
+    return @mainHandler.getPath(*(['static', base] + path))
   end
 
   def getStylesheet(name)
-    getStaticPath('style', name + '.css')
+    getStaticPath('style', [name + '.css'])
   end
 
-  def getImage(file)
-    getStaticPath('image', file)
+  def getImage(*path)
+    getStaticPath('image', path)
   end
 end

@@ -81,12 +81,12 @@ table
 
 th
 {
-    padding: 0 0.3em 0 0.3em;
+    padding: 0 0.5em 0 0.5em;
 }
 
 td
 {
-    padding: 0 0.3em 0 0.3em;
+    padding: 0 0.5em 0 0.5em;
     border: 1px solid white;
 }
 
@@ -126,4 +126,10 @@ li
 ul.playerStats
 {
     margin-bottom: 2em;
+}
+
+td img
+{
+    margin: 2px 0 2px 0;
+    vertical-align: middle;
 }
