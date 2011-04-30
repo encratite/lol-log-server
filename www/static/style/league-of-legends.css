@@ -8,8 +8,13 @@
 
 body
 {
-    color: #ffffff;
+    text-align: center;
+    color: #000000;
     background: #000000;
+    height: 100%;
+    background-image: url('/lol/static/image/background/middle.jpg');
+    background-repeat: repeat-y;
+    background-position: center top;
 }
 
 h1
@@ -34,22 +39,16 @@ p
 {
     margin: 0 auto;
     text-align: justify;
-    margin: 0.4em 0 0.4em 0;
+    margin-bottom: 1em;
 }
 
 div.container
 {
     margin: 0 auto;
-    border: 1px solid #fff;
-    width: 1200px;
-    padding: 1em;
+    width: 1060px;
     text-align: left;
-    margin-bottom: 4em;
-}
-
-div.center
-{
-    text-align: center;
+    padding: 0 70px 0 70px;
+    margin-top: -100px;
 }
 
 a
@@ -87,7 +86,7 @@ th
 td
 {
     padding: 0 0.5em 0 0.5em;
-    border: 1px solid white;
+    border: 1px solid black;
 }
 
 table.gameTable
@@ -97,7 +96,7 @@ table.gameTable
 
 table.pageLinks
 {
-    margin-top: 1em;
+    margin: 2em 0 2em 0;
     width: 100%;
 }
 
@@ -132,4 +131,17 @@ td img
 {
     margin: 2px 0 2px 0;
     vertical-align: middle;
+}
+
+img.backgroundTop
+{
+    vertical-align: bottom;
+    position: relative;
+    z-index: -1;
+}
+
+img.backgroundBottom
+{
+    margin-bottom: 2em;
+    vertical-align: top;
 }

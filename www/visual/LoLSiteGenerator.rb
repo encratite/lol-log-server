@@ -5,22 +5,11 @@ require 'www-library/string'
 class LoLSiteGenerator < WWWLib::SiteGenerator
   def render(request, content)
     writer = WWWLib::HTMLWriter.new
-    writer.div(class: 'center') do
-      request.handler.getMenu.each do |menuLevel|
-        writer.ul(id: 'menu') do
-          menuLevel.each do |item|
-            writer.li do
-              writer.a(href: WWWLib.slashify(item.path)) do
-                item.description
-              end
-            end
-          end
-        end
-      end
-      writer.div(class: 'container') do
-        content
-      end
+    writer.img(src: @site.getImage('background', 'top.jpg'), class: 'backgroundTop')
+    writer.div(class: 'container') do
+      writer.write(content)
     end
+    #writer.img(src: @site.getImage('background', 'bottom.jpg'), class: 'backgroundBottm')
     return writer.output
   end
 end
