@@ -79,6 +79,11 @@ table
     border-collapse: collapse;
 }
 
+th
+{
+    padding: 0 0.3em 0 0.3em;
+}
+
 td
 {
     padding: 0 0.3em 0 0.3em;
@@ -111,4 +116,14 @@ td.nextPage
 {
     padding-right: 2em;
     text-align: right;
+}
+
+li
+{
+    margin-left: 2em;
+}
+
+ul.playerStats
+{
+    margin-bottom: 2em;
 }
