@@ -52,7 +52,7 @@ class GameResult
     return teamId
   end
 
-  def insertIntoDatabase(database)
+  def insertIntoDatabase(database, address)
     defeatedTeamId = processTeam(@defeatedTeam, database)
     victoriousTeamId = processTeam(@victoriousTeam, database)
 
@@ -81,6 +81,8 @@ class GameResult
 
       defeated_team_id: defeatedTeamId,
       victorious_team_id: victoriousTeamId,
+
+      uploader_address: address,
     }
     gameResults.insert(fields)
   end

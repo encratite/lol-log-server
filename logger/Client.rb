@@ -73,6 +73,6 @@ class Client
     print "Received end of game stats (#{content.size} bytes)"
     root = parseBody(content)
     result = GameResult.new(root)
-    result.insertIntoDatabase(@database)
+    result.insertIntoDatabase(@database, @address)
   end
 end

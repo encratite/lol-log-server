@@ -81,5 +81,8 @@ create table game_result
         player_was_victorious boolean not null,
 
         defeated_team_id integer references team(id) not null,
-        victorious_team_id integer references team(id) not null
+        victorious_team_id integer references team(id) not null,
+
+        upload_time timestamp default now(),
+        uploader_address text not null
 );
