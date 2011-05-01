@@ -72,7 +72,11 @@ class Client
     content = remainingContent[0..length - 1]
     print "Received end of game stats (#{content.size} bytes)"
     root = parseBody(content)
-    result = GameResult.new(root)
-    result.insertIntoDatabase(@database, @address)
+    begin
+      result = GameResult.new(root)
+      result.insertIntoDatabase(@database, @address)
+    rescue RuntimeError => exception
+      print "Result has been ignored due to an error: #{exception.messsage}"
+    end
   end
 end
