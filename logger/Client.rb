@@ -76,7 +76,7 @@ class Client
       result = GameResult.new(root)
       result.insertIntoDatabase(@database, @address)
     rescue RuntimeError => exception
-      print "Result has been ignored due to an error: #{exception.messsage}"
+      print "Result has been ignored due to an error: #{exception.message}"
     end
   end
 end
