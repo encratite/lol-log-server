@@ -2,6 +2,7 @@ require 'nil/string'
 
 require_relative 'GameResult'
 require_relative 'parser'
+require_relative 'date'
 
 class Client
   ReadSize = 4 * 1024
@@ -71,9 +72,22 @@ class Client
     @buffer = remainingContent[length..-1]
     content = remainingContent[0..length - 1]
     print "Received end of game stats (#{content.size} bytes)"
-    root = parseBody(content)
+    lines = content.split("\n")
+    if lines.size < 4
+      raise 'Invalid line count'
+      return
+    end
+    utcOffsetInSeconds = lines[0].to_i
+    precedingLine = lines[1]
+    time = parseDate(precedingLine)
+    if time == nil
+      raise "Unable to parse time string: #{precedingLine.inspect}"
+    end
+    time -= utcOffsetInSeconds
+    stats = lines[2..-1].join("\n")
+    root = parseBody(stats)
     begin
-      result = GameResult.new(root)
+      result = GameResult.new(time, stats, root)
       result.insertIntoDatabase(@database, @address)
     rescue RuntimeError => exception
       print "Result has been ignored due to an error: #{exception.message}"

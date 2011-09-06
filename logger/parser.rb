@@ -16,6 +16,10 @@ def parseLine(line)
 end
 
 def translateValue(string)
+  if !string.empty? && string[0] == '#'
+    #return :hidden
+    return nil
+  end
   if string.isNumber
     return string.to_i
   end

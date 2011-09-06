@@ -11,8 +11,6 @@ create table player_result
 (
         id serial primary key,
 
-        user_id integer not null,
-
         summoner_name text not null,
         summoner_level integer not null,
 
@@ -27,27 +25,36 @@ create table player_result
         deaths integer not null,
         assists integer not null,
 
-        minions_killed integer not null,
-        neutral_minions_killed integer not null,
+        --the following values are no longer always available
 
-        gold integer not null,
+        minions_killed integer,
+        neutral_minions_killed integer,
 
-        physical_damage_dealt integer not null,
-        physical_damage_taken integer not null,
+        gold integer,
 
-        magical_damage_dealt integer not null,
-        magical_damage_taken integer not null,
+        physical_damage_dealt integer,
+        physical_damage_taken integer,
 
-        amount_healed integer not null,
+        magical_damage_dealt integer,
+        magical_damage_taken integer,
 
-        turrets_destroyed integer not null,
-        barracks_destroyed integer not null,
+        amount_healed integer,
 
-        largest_critical_strike integer not null,
-        largest_multikill integer not null,
-        longest_killing_spree integer not null,
+        turrets_destroyed integer,
+        barracks_destroyed integer,
 
-        time_spent_dead integer not null
+        largest_critical_strike integer,
+        largest_multikill integer,
+        longest_killing_spree integer,
+
+        time_spent_dead integer,
+
+        item0 integer,
+        item1 integer,
+        item2 integer,
+        item3 integer,
+        item4 integer,
+        item5 integer
 );
 
 drop table if exists team_player cascade;
@@ -65,10 +72,15 @@ create table game_result
 (
         id serial primary key,
 
-        game_id integer unique not null,
+        log_data text not null,
+
+        log_hash bytea unique not null,
 
         time_finished timestamp not null,
+
+        game_mode text not null,
         game_type text not null,
+
         queue_type text not null,
         duration integer not null,
 
@@ -76,7 +88,6 @@ create table game_result
         elo_change integer not null,
 
         ip_earned integer not null,
-        ip_total integer not null,
 
         player_was_victorious boolean not null,
 

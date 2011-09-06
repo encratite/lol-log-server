@@ -1,16 +1,18 @@
+require 'digest/sha1'
+
 require_relative 'PlayerResult'
 
 class GameResult
-  def initialize(root)
-    @id = root.get(:gameId)
-    @time = Time.at(root.get(:timestamp) / 1000).getutc
+  def initialize(time, contents, root)
+    @time = time
+    @contents = contents
+    @hash = Digest::SHA1.digest(contents)
     @gameType = root.get(:gameType)
     @queueType = root.get(:queueType)
     @duration = root.get(:gameLength)
     @elo = root.get(:elo)
     @eloChange = root.get(:eloChange)
     @ipEarned = root.get(:ipEarned)
-    @ipTotal = root.get(:ipTotal)
     ownTeam = getTeamPlayers(root, :teamPlayerParticipantStats)
     otherTeam = getTeamPlayers(root, :otherTeamPlayerParticipantStats)
     if ownTeam.size != otherTeam.size
@@ -58,16 +60,21 @@ class GameResult
 
     gameResults = database[:game_result]
 
-    if !gameResults.where(game_id: @id).empty?
-      puts "Game #{@id} is already in the database - skipping"
+    if !gameResults.where(log_hash: @hash.to_sequel_blob).empty?
+      puts "Game #{@time} is already in the database - skipping"
       return
     end
 
     fields = {
-      game_id: @id,
+      log_data: @contents,
+
+      log_hash: @hash.to_sequel_blob,
 
       time_finished: @time,
+
+      game_mode: @gameMode,
       game_type: @gameType,
+
       queue_type: @queueType,
       duration: @duration,
 
@@ -75,7 +82,6 @@ class GameResult
       elo_change: @eloChange,
 
       ip_earned: @ipEarned,
-      ip_total: @ipTotal,
 
       player_was_victorious: @playerWasVictorious,
 
@@ -84,6 +90,7 @@ class GameResult
 
       uploader_address: address,
     }
+
     gameResults.insert(fields)
   end
 end

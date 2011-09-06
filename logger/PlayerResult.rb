@@ -34,6 +34,12 @@ class PlayerResult
     'TURRETS_KILLED' => :turretsDestroyed,
     'NUM_DEATHS' => :deaths,
     'CHAMPIONS_KILLED' => :kills,
+    'ITEM0' => :item0,
+    'ITEM1' => :item1,
+    'ITEM2' => :item2,
+    'ITEM3' => :item3,
+    'ITEM4' => :item4,
+    'ITEM5' => :item5,
   }
 
   attr_reader :victorious
@@ -61,23 +67,10 @@ class PlayerResult
       setMember(destinationSymbol, value)
     end
     @victorious = statistics['LOSE'] == nil
-    @items = []
-    itemCount = 6
-    itemCount.times do |i|
-      value = statistics["ITEM#{i}"]
-      if value == nil
-        raise "Unable to retrieve item #{i}"
-      end
-      #don't keep track of empty item slots
-      next if value == 0
-      @items << value
-    end
   end
 
   def getDatabaseFields
     return {
-      user_id: @id,
-
       summoner_name: @name,
       summoner_level: @summonerLevel,
 
@@ -113,6 +106,13 @@ class PlayerResult
       longest_killing_spree: @longestKillingSpree,
 
       time_spent_dead: @timeSpentDead,
+
+      item0: @item0,
+      item1: @item1,
+      item2: @item2,
+      item3: @item3,
+      item4: @item4,
+      item5: @item5,
     }
   end
 end
