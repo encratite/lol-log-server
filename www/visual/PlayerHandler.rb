@@ -23,12 +23,12 @@ class Percentage
 end
 
 class PlayerHandler < SiteContainer
-  def renderPlayer(playerName, playerId, defeats, victories, championData)
+  def renderPlayer(summonerName, defeats, victories, championData)
     writer = WWWLib::HTMLWriter.new
     gameCount = defeats.size + victories.size
     winRatio = percentageString(victories.size.to_f / gameCount)
     stats = [
-      ['Summoner name', playerName],
+      ['Summoner name', summonerName],
       ['Total number of games', gameCount],
       ['Victories', victories.size],
       ['Defeats', defeats.size],
@@ -55,13 +55,13 @@ class PlayerHandler < SiteContainer
           'KDA',
           'Minions',
           'Neutral minions',
-          'Gold',
+          #'Gold',
         ]
         columnIndex = 0
         columns.each do |column|
           writer.th do
             columnString = SortableColumns[columnIndex]
-            path = @playerHandler.getPath(playerId.to_s, columnString)
+            path = @playerHandler.getPath(summonerName, columnString)
             writer.a(href: path) do
               column
             end
@@ -103,7 +103,7 @@ class PlayerHandler < SiteContainer
       champion.killsAndAssistsPerDeath,
       champion.minionsKilledPerGame,
       champion.neutralMinionsKilledPerGame,
-      champion.goldPerGame,
+      #champion.goldPerGame,
     ]
 
     champion.columns = columns

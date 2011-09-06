@@ -22,7 +22,7 @@ class PlayerHandler < SiteContainer
     'killsAndAssistsPerDeath',
     'minionsKilledPerGame',
     'neutralMinionsKilledPerGame',
-    'goldPerGame',
+    #'goldPerGame',
   ]
 
   def installHandlers
@@ -36,24 +36,19 @@ class PlayerHandler < SiteContainer
 
   def viewPlayer(request)
     arguments = request.arguments
-    playerIdString = arguments.first
-    if !playerIdString.isNumber
-      argumentError
-    end
+    summonerName = arguments.first
     sortingString = arguments.size == 1 ? SortableColumns.first : arguments[1]
     sortableIndex = SortableColumns.index(sortingString)
     if sortableIndex == nil
       argumentError
     end
-    playerId = playerIdString.to_i
-    result = @database[:player_result].select(:summoner_name).where(user_id: playerId).limit(1).all
+    result = @database[:player_result].where(summoner_name: summonerName).limit(1)
     if result.empty?
       argumentError
     end
-    playerName = result.first[:summoner_name]
-    title = playerName
-    defeats = getPlayerPerformance(playerId, :defeated_team_id)
-    victories = getPlayerPerformance(playerId, :victorious_team_id)
+    title = summonerName
+    defeats = getPlayerPerformance(summonerName, :defeated_team_id)
+    victories = getPlayerPerformance(summonerName, :victorious_team_id)
     championData = {}
     sortByChampion(defeats, championData, false)
     sortByChampion(victories, championData, true)
@@ -77,12 +72,12 @@ class PlayerHandler < SiteContainer
         - (left <=> right)
       end
     end
-    content = renderPlayer(playerName, playerId, defeats, victories, championData)
+    content = renderPlayer(summonerName, defeats, victories, championData)
     return @generator.get(content, request, title)
   end
 
-  def getPlayerPerformance(playerId, teamSymbol)
-    return @database[:game_result].left_outer_join(:team_player, team_id: teamSymbol).left_outer_join(:player_result, id: :player_id).where(user_id: playerId).all
+  def getPlayerPerformance(summonerName, teamSymbol)
+    return @database[:game_result].left_outer_join(:team_player, team_id: teamSymbol).left_outer_join(:player_result, id: :player_id).where(summoner_name: summonerName).all
   end
 
   def sortByChampion(games, championData, isVictory)

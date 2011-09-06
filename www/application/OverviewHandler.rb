@@ -18,7 +18,7 @@ class OverviewHandler < SiteContainer
   end
 
   def getTeamData(teamId)
-    return @database[:team_player].where(team_id: teamId).left_outer_join(:player_result, :team_player__player_id => :player_result__id).select(:player_result__user_id, :player_result__summoner_name)
+    return @database[:team_player].where(team_id: teamId).left_outer_join(:player_result, :team_player__player_id => :player_result__id).select(:player_result__summoner_name)
   end
 
   def overview(request)

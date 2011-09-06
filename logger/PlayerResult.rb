@@ -60,10 +60,10 @@ class PlayerResult
     end
 
     StatMapping.each do |statName, destinationSymbol|
-      value = statistics[statName]
-      if value == nil
+      if !statistics.has_key?(statName)
         raise "Unable to find a stats entry for #{statName.inspect}"
       end
+      value = statistics[statName]
       setMember(destinationSymbol, value)
     end
     @victorious = statistics['LOSE'] == nil

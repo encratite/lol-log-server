@@ -36,8 +36,11 @@ class Client
         @buffer += data
         processBuffer
       end
+    rescue EOFError => exception
+      print 'Disconnected'
+      return
     rescue => exception
-      print "An exception occurred: #{exception.message}"
+      print "An exception of type #{exception.class} occurred: #{exception.message}"
       puts exception.backtrace.join("\n")
     end
     close

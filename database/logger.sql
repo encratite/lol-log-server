@@ -78,7 +78,8 @@ create table game_result
 
         time_finished timestamp not null,
 
-        game_mode text not null,
+        --this is a new variable which does not exist in old logs
+        game_mode text,
         game_type text not null,
 
         queue_type text not null,

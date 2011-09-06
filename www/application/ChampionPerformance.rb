@@ -73,13 +73,19 @@ class ChampionPerformance
       :minionsKilled,
       :neutralMinionsKilled,
 
-      :gold,
+      #:gold,
 
       :defeats,
       :victories
     ]
     toCombine.each do |symbol|
-      value = getMember(symbol) + performance.getMember(symbol)
+      left = getMember(symbol)
+      right = performance.getMember(symbol)
+      if left == nil || right == nil
+        value = nil
+      else
+        value = left + right
+      end
       setMember(symbol, value)
     end
   end
