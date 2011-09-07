@@ -56,6 +56,8 @@ class ChampionPerformance
       'GemKnight' => 'Taric',
       'Minotaur' => 'Alistar',
       'FiddleSticks' => 'Fiddlesticks',
+      'LeeSin' => 'Lee Sin',
+      'MonkeyKing' => 'Wukong',
     }
     translation = translations[input]
     if translation != nil
