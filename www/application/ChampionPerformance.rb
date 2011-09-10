@@ -59,6 +59,7 @@ class ChampionPerformance
       'LeeSin' => 'Lee Sin',
       'MonkeyKing' => 'Wukong',
       'Chogath' => "Cho'Gath",
+      'XinZhao' => 'Xin Zhao',
     }
     translation = translations[input]
     if translation != nil
