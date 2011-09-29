@@ -103,6 +103,9 @@ def parseBodyObject(lines, offset)
 end
 
 def parseBody(body)
+  body = body.gsub("\r", '')
+  body = body.gsub("Points Captured\n\nPoint Capture: 40 Score", 'null')
+  body = body.gsub("Points Neutralized\n\nPoint Neutralize: 40 Score", 'null')
   lines = body.strip.split("\n").map { |x| parseLine(x) }
   if lines.empty?
     raise "Encountered an empty body"

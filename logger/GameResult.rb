@@ -7,6 +7,7 @@ class GameResult
     @time = time
     @contents = contents
     @hash = Digest::SHA1.digest(contents)
+    @gameMode = root.get(:gameMode)
     @gameType = root.get(:gameType)
     @queueType = root.get(:queueType)
     @duration = root.get(:gameLength)

@@ -124,7 +124,7 @@ li
 
 ul.playerStats
 {
-    margin-bottom: 2em;
+    margin-bottom: 1em;
 }
 
 td img
@@ -144,4 +144,9 @@ img.backgroundBottom
 {
     margin-bottom: 2em;
     vertical-align: top;
+}
+
+table.championData
+{
+    margin-bottom: 2em;
 }

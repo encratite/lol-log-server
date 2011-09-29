@@ -23,17 +23,7 @@ class Percentage
 end
 
 class PlayerHandler < SiteContainer
-  def renderPlayer(summonerName, defeats, victories, championData)
-    writer = WWWLib::HTMLWriter.new
-    gameCount = defeats.size + victories.size
-    winRatio = percentageString(victories.size.to_f / gameCount)
-    stats = [
-      ['Summoner name', summonerName],
-      ['Total number of games', gameCount],
-      ['Victories', victories.size],
-      ['Defeats', defeats.size],
-      ['Win ratio', winRatio],
-    ]
+  def renderStats(writer, stats)
     writer.ul(class: 'playerStats') do
       stats.each do |description, value|
         writer.li do
@@ -42,41 +32,64 @@ class PlayerHandler < SiteContainer
         end
       end
     end
-    writer.table(class: 'championData') do
-      writer.tr do
-        columns = [
-          'Champion',
-          'Games played',
-          'Win ratio',
-          'Kills',
-          'Deaths',
-          'Assists',
-          'KDR',
-          'KDA',
-          'Minions',
-          'Neutral minions',
-          #'Gold',
-        ]
-        columnIndex = 0
-        columns.each do |column|
-          writer.th do
-            columnString = SortableColumns[columnIndex]
-            path = @playerHandler.getPath(summonerName, columnString)
-            writer.a(href: path) do
-              column
-            end
-          end
-          columnIndex += 1
-        end
-      end
-      championData.each do |champion|
+  end
+
+  def renderPlayer(summonerName, queueTypeResults)
+    writer = WWWLib::HTMLWriter.new
+    stats = [
+        ['Summoner name', summonerName],
+    ]
+    renderStats(writer, stats)
+    queueTypeResults.each do |queueTypeResult|
+      defeats = queueTypeResult.defeats
+      victories = queueTypeResult.victories
+      championData = queueTypeResult.championData
+      gameCount = defeats.size + victories.size
+      winRatio = percentageString(victories.size.to_f / gameCount)
+      stats = [
+        ['Queue type', queueTypeResult.queueType],
+        ['Games', gameCount],
+        ['Victories', victories.size],
+        ['Defeats', defeats.size],
+        ['Win ratio', winRatio],
+      ]
+      renderStats(writer, stats)
+      writer.table(class: 'championData') do
         writer.tr do
-          champion.columns.each do |value|
-            writer.td do
-              if value.class == Float
-                sprintf('%.1f', value)
-              else
-                value.to_s
+          columns = [
+            'Champion',
+            'Games played',
+            'Win ratio',
+            'Kills',
+            'Deaths',
+            'Assists',
+            'KDR',
+            'KDA',
+            'Minions',
+            'Neutral minions',
+            #'Gold',
+          ]
+          columnIndex = 0
+          columns.each do |column|
+            writer.th do
+              columnString = SortableColumns[columnIndex]
+              path = @playerHandler.getPath(summonerName, columnString)
+              writer.a(href: path) do
+                column
+              end
+            end
+            columnIndex += 1
+          end
+        end
+        championData.each do |champion|
+          writer.tr do
+            champion.columns.each do |value|
+              writer.td do
+                if value.class == Float
+                  sprintf('%.1f', value)
+                else
+                  value.to_s
+                end
               end
             end
           end

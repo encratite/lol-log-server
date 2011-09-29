@@ -61,7 +61,12 @@ class PlayerResult
 
     StatMapping.each do |statName, destinationSymbol|
       if !statistics.has_key?(statName)
-        raise "Unable to find a stats entry for #{statName.inspect}"
+        #not consistently available
+        if ['BARRACKS_KILLED', 'TURRETS_KILLED'].include?(statName)
+          value = nil
+        else
+          raise "Unable to find a stats entry for #{statName.inspect}"
+        end
       end
       value = statistics[statName]
       setMember(destinationSymbol, value)
