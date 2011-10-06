@@ -36,10 +36,12 @@ class PlayerHandler < SiteContainer
 
   def renderPlayer(summonerName, queueTypeResults)
     writer = WWWLib::HTMLWriter.new
-    stats = [
+    if summonerName != nil
+      stats = [
         ['Summoner name', summonerName],
-    ]
-    renderStats(writer, stats)
+      ]
+      renderStats(writer, stats)
+    end
     queueTypeResults.each do |queueTypeResult|
       defeats = queueTypeResult.defeats
       victories = queueTypeResult.victories
@@ -48,11 +50,19 @@ class PlayerHandler < SiteContainer
       winRatio = percentageString(victories.size.to_f / gameCount)
       stats = [
         ['Queue type', queueTypeResult.queueType],
-        ['Games', gameCount],
-        ['Victories', victories.size],
-        ['Defeats', defeats.size],
-        ['Win ratio', winRatio],
       ]
+      if summonerName == nil
+        stats += [
+          ['Samples', victories.size],
+        ]
+      else
+        stats += [
+          ['Games', gameCount],
+          ['Victories', victories.size],
+          ['Defeats', defeats.size],
+          ['Win ratio', winRatio],
+        ]
+      end
       renderStats(writer, stats)
       writer.table(class: 'championData') do
         writer.tr do
@@ -73,7 +83,11 @@ class PlayerHandler < SiteContainer
           columns.each do |column|
             writer.th do
               columnString = SortableColumns[columnIndex]
-              path = @playerHandler.getPath(summonerName, columnString)
+              if summonerName == nil
+                path = @totalHandler.getPath(columnString)
+              else
+                path = @playerHandler.getPath(summonerName, columnString)
+              end
               writer.a(href: path) do
                 column
               end

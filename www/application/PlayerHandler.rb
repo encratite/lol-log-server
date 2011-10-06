@@ -7,6 +7,7 @@ require 'www-library/RequestHandler'
 require 'application/SiteContainer'
 require 'application/error'
 require 'application/ChampionPerformance'
+require 'application/Timer'
 
 require 'visual/PlayerHandler'
 
@@ -52,7 +53,9 @@ class PlayerHandler < SiteContainer
 
   def installHandlers
     @playerHandler = WWWLib::RequestHandler.handler('player', method(:viewPlayer), 1..2)
+    @totalHandler = WWWLib::RequestHandler.handler('total', method(:allStatistics), 0..1)
     addHandler(@playerHandler)
+    addHandler(@totalHandler)
   end
 
   def nanHack
@@ -63,18 +66,36 @@ class PlayerHandler < SiteContainer
     arguments = request.arguments
     summonerName = arguments.first
     sortingString = arguments.size == 1 ? SortableColumns.first : arguments[1]
+    return viewPlayerData(summonerName, sortingString, request)
+  end
+
+  def allStatistics(request)
+    arguments = request.arguments
+    sortingString = arguments.size == 0 ? SortableColumns.first : arguments[0]
+    return viewPlayerData(nil, sortingString, request)
+  end
+
+  def viewPlayerData(summonerName, sortingString, request)
     sortableIndex = SortableColumns.index(sortingString)
     if sortableIndex == nil
       argumentError
     end
-    result = @database[:player_result].where(summoner_name: summonerName).limit(1)
-    if result.empty?
-      argumentError
+    if summonerName == nil
+      title = 'Summary'
+    else
+      result = @database[:player_result].where(summoner_name: summonerName).limit(1)
+      if result.empty?
+        argumentError
+      end
+      title = summonerName
     end
-    title = summonerName
+    timer = Timer.new
     allDefeats = getPlayerPerformance(summonerName, :defeated_team_id)
+    timer.print
     allVictories = getPlayerPerformance(summonerName, :victorious_team_id)
+    timer.print
     queueTypes = (allDefeats.keys + allVictories.keys).to_set
+    timer.print
     queueTypeResults = []
     queueTypes.each do |queueType|
       defeats = allDefeats[queueType]
@@ -110,12 +131,20 @@ class PlayerHandler < SiteContainer
       end
       queueTypeResults << QueueTypeResults.new(queueType, defeats, victories, championData)
     end
+    timer.print
     content = renderPlayer(summonerName, queueTypeResults)
+    timer.print
     return @generator.get(content, request, title)
   end
 
   def getPlayerPerformance(summonerName, teamSymbol)
-    results = @database[:game_result].left_outer_join(:team_player, team_id: teamSymbol).left_outer_join(:player_result, id: :player_id).where(summoner_name: summonerName).all
+    results = @database[:game_result].left_outer_join(:team_player, team_id: teamSymbol).left_outer_join(:player_result, id: :player_id)
+    if summonerName != nil
+      results = results.where(summoner_name: summonerName)
+    end
+    timer = Timer.new
+    results = results.all
+    timer.print
     output = {}
     results.each do |result|
       queueType = result[:queue_type]
